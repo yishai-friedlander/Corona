@@ -1141,7 +1141,7 @@ Corona.Country.Israel <- Corona.Country.[Corona.Country.$Country == "Israel" & C
 
 if (sum(Corona.Country.Israel$Date == YESTERDAY.F) == 0) {
         Corona.Country.Israel <- rbind(Corona.Country.Israel, data.frame(Country = "Israel", Date = YESTERDAY.F,
-                                                                 value = 1296343, Date. = YESTERDAY))
+                                                                 value = 1300968, Date. = YESTERDAY))
 }
 
 
@@ -1163,7 +1163,7 @@ START <- as.numeric(as.Date("2020-02-21"))
 Death.Israel <- Death.Country[Death.Country$Country == "Israel",]
 Death.Israel <- Death.Israel[!(names(Death.Israel) %in% format.Date(as.Date(as.numeric(as.Date("2020-01-20")):(as.numeric(START)-1), origin = "1970-01-01"), "%d %b %Y"))]
 if (!YESTERDAY.F %in% names(Death.Israel)) {
-        Death.Israel[, YESTERDAY.F] <- 7855
+        Death.Israel[, YESTERDAY.F] <- 7882
 }
 
 
@@ -2285,7 +2285,7 @@ dev.off()
 # Cases by Age ------------------------------------------------------------
 
 
-# AGE <- read.csv("corona_age_and_gender_ver_00131.csv")
+# AGE <- read.csv("corona_age_and_gender_ver_00132.csv")
 # names(AGE)[2] <- "Date"
 # AGE$weekly_cases[AGE$weekly_cases == "<15"] <- 8
 # AGE$weekly_cases <- as.numeric(AGE$weekly_cases)
