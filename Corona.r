@@ -2285,7 +2285,7 @@ dev.off()
 # Cases by Age ------------------------------------------------------------
 
 
-# AGE <- read.csv("corona_age_and_gender_ver_00132.csv")
+# AGE <- read.csv("corona_age_and_gender_ver_00137.csv")
 # names(AGE)[2] <- "Date"
 # AGE$weekly_cases[AGE$weekly_cases == "<15"] <- 8
 # AGE$weekly_cases <- as.numeric(AGE$weekly_cases)
