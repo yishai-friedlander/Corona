@@ -1141,7 +1141,7 @@ Corona.Country.Israel <- Corona.Country.[Corona.Country.$Country == "Israel" & C
 
 if (sum(Corona.Country.Israel$Date == YESTERDAY.F) == 0) {
         Corona.Country.Israel <- rbind(Corona.Country.Israel, data.frame(Country = "Israel", Date = YESTERDAY.F,
-                                                                 value = 1335654, Date. = YESTERDAY))
+                                                                 value = 1336882, Date. = YESTERDAY))
 }
 
 
@@ -1163,7 +1163,7 @@ START <- as.numeric(as.Date("2020-02-21"))
 Death.Israel <- Death.Country[Death.Country$Country == "Israel",]
 Death.Israel <- Death.Israel[!(names(Death.Israel) %in% format.Date(as.Date(as.numeric(as.Date("2020-01-20")):(as.numeric(START)-1), origin = "1970-01-01"), "%d %b %Y"))]
 if (!YESTERDAY.F %in% names(Death.Israel)) {
-        Death.Israel[, YESTERDAY.F] <- 8133
+        Death.Israel[, YESTERDAY.F] <- 8140
 }
 
 
