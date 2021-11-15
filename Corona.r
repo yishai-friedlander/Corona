@@ -1141,7 +1141,7 @@ Corona.Country.Israel <- Corona.Country.[Corona.Country.$Country == "Israel" & C
 
 if (sum(Corona.Country.Israel$Date == YESTERDAY.F) == 0) {
         Corona.Country.Israel <- rbind(Corona.Country.Israel, data.frame(Country = "Israel", Date = YESTERDAY.F,
-                                                                 value = 1336882, Date. = YESTERDAY))
+                                                                 value = 1337190, Date. = YESTERDAY))
 }
 
 
@@ -1163,7 +1163,7 @@ START <- as.numeric(as.Date("2020-02-21"))
 Death.Israel <- Death.Country[Death.Country$Country == "Israel",]
 Death.Israel <- Death.Israel[!(names(Death.Israel) %in% format.Date(as.Date(as.numeric(as.Date("2020-01-20")):(as.numeric(START)-1), origin = "1970-01-01"), "%d %b %Y"))]
 if (!YESTERDAY.F %in% names(Death.Israel)) {
-        Death.Israel[, YESTERDAY.F] <- 8140
+        Death.Israel[, YESTERDAY.F] <- 8143
 }
 
 
@@ -1771,6 +1771,90 @@ dev.off()
 # textplot(tex, halign = "center", cex = 2)
 # 
 # dev.off()
+
+
+
+
+
+
+
+
+
+# Outbreak Top 10 Curve ----------------------------------------------------------
+
+Corona.Country. <- melt(data = Corona.Country, id.vars = "Country", measure.vars = names(Corona.Country)[2:length(Corona.Country)], variable_name = "Date")
+Corona.Country.$value[is.na(Corona.Country.$value)] <- 0
+Corona.Country.$Date <- Corona.Country.$variable
+Corona.Country.$Date. <- as.Date(as.character(Corona.Country.$Date), "%d %b %Y")
+
+
+
+Top.Countries <- TOP.10.OUTBREAK.RANK$Country
+
+
+Outbreak.Curve <- Corona.Country.[Corona.Country.$Country %in% Top.Countries,]
+Outbreak.Curve <- Outbreak.Curve[order(Outbreak.Curve$Country, Outbreak.Curve$Date.),]
+Outbreak.Curve$Change <- 0
+for (i in 2:length(Outbreak.Curve$Country)) {
+        if (Outbreak.Curve$Country[i] == Outbreak.Curve$Country[i-1]) {
+                Outbreak.Curve$Change[i] <- Outbreak.Curve$value[i] - Outbreak.Curve$value[i-1]
+        }
+}
+
+
+Outbreak.Curve <- merge(Outbreak.Curve, pop, "Country", all.x = T)
+Outbreak.Curve$Change <- (Outbreak.Curve$Change / Outbreak.Curve$Population) * 1000000
+
+Colors <- data.frame(Country = Top.Countries, 
+                     Color = c("bisque4", "light green", "cornflowerblue", "cyan", "magenta", "dark gray", "black", "red", "orange",
+                               "dark red"))
+Colors$Color <- as.character(Colors$Color)
+
+# , "brown", "red", "blue", "pink", "darkmagenta", "chartreuse3", "darkgoldenrod1", "goldenrod4"
+
+
+Outbreak.Curve. <- Outbreak.Curve[Outbreak.Curve$Country %in% Top.Countries,]
+Top.Countries. <- Top.Countries[Top.Countries %in% unique(Outbreak.Curve.$Country)]
+
+jpeg(paste0("plots/outbreak curve.per.1M.Top.10 ", Sys.Date(), ".jpg"), width = 800, height = 800)
+
+i <- 1
+tex <- paste0("Plot Produced by StatistX at ", format.Date(Sys.time(), "%d %B %Y %H:%M"), 
+              "\nPlot shows population adjusted epidemiological curves of COVID-19\nThe epidemiological curves are smoothed to emphasis the curve trend")
+layout(matrix(c(2,1)), 0.4, 2)
+par(mar = c(4, 4, 4, 4))
+textplot(tex, halign = "center", cex = 1)
+
+plot(smooth.spline(Outbreak.Curve.$Date.[Outbreak.Curve.$Country == Top.Countries.[i]], 
+                   Outbreak.Curve.$Change[Outbreak.Curve.$Country == Top.Countries.[i]], spar = 0.7), 
+     col = Colors$Color[Colors$Country == Top.Countries.[i]], lwd=3, type='l', ylim=c(0,1600), 
+     ylab="New Cases per 1M", xlab="", main="Epidemiological Curve per 1M for Top 10 Countries", xaxt = 'n')
+
+
+for (i in 2:length(Top.Countries.)) {
+        lines(smooth.spline(Outbreak.Curve.$Date.[Outbreak.Curve.$Country == Top.Countries.[i]], 
+                            Outbreak.Curve.$Change[Outbreak.Curve.$Country == Top.Countries.[i]], spar = 0.7),
+              col = Colors$Color[Colors$Country == Top.Countries.[i]], lwd=3)
+}
+axis(side = 1, at = Outbreak.Curve.$Date.[Outbreak.Curve.$Country == Top.Countries.[i]], 
+     labels = Outbreak.Curve.$Date[Outbreak.Curve.$Country == Top.Countries.[i]], las=2)
+Colors.Legend <- Colors[Colors$Country %in% unique(Outbreak.Curve.$Country),]
+legend("topleft", legend = Colors.Legend$Country, lty=1, lwd=3, col=Colors.Legend$Color)
+
+rasterImage(statistx, 
+            xleft=min(Outbreak.Curve.$Date.) + 60, min(Outbreak.Curve.$Date.) + length(Outbreak.Curve.$Date.[Outbreak.Curve.$Country == Top.Countries.[i]])*0.25 + 60, 
+            ybottom=max(max(Outbreak.Curve.$Change))*(0.20), ytop=max(max(Outbreak.Curve.$Change))*0.30)
+
+
+dev.off()
+
+
+
+
+
+
+
+
 
 
 
