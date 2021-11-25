@@ -1141,7 +1141,7 @@ Corona.Country.Israel <- Corona.Country.[Corona.Country.$Country == "Israel" & C
 
 if (sum(Corona.Country.Israel$Date == YESTERDAY.F) == 0) {
         Corona.Country.Israel <- rbind(Corona.Country.Israel, data.frame(Country = "Israel", Date = YESTERDAY.F,
-                                                                 value = 1339987, Date. = YESTERDAY))
+                                                                 value = 1340481, Date. = YESTERDAY))
 }
 
 
@@ -1163,7 +1163,7 @@ START <- as.numeric(as.Date("2020-02-21"))
 Death.Israel <- Death.Country[Death.Country$Country == "Israel",]
 Death.Israel <- Death.Israel[!(names(Death.Israel) %in% format.Date(as.Date(as.numeric(as.Date("2020-01-20")):(as.numeric(START)-1), origin = "1970-01-01"), "%d %b %Y"))]
 if (!YESTERDAY.F %in% names(Death.Israel)) {
-        Death.Israel[, YESTERDAY.F] <- 8178
+        Death.Israel[, YESTERDAY.F] <- 8180
 }
 
 
@@ -1827,7 +1827,7 @@ textplot(tex, halign = "center", cex = 1)
 
 plot(smooth.spline(Outbreak.Curve.$Date.[Outbreak.Curve.$Country == Top.Countries.[i]], 
                    Outbreak.Curve.$Change[Outbreak.Curve.$Country == Top.Countries.[i]], spar = 0.7), 
-     col = Colors$Color[Colors$Country == Top.Countries.[i]], lwd=3, type='l', ylim=c(0,1600), 
+     col = Colors$Color[Colors$Country == Top.Countries.[i]], lwd=3, type='l', ylim=c(0,2000), 
      ylab="New Cases per 1M", xlab="", main="Epidemiological Curve per 1M for Top 10 Countries", xaxt = 'n')
 
 
